@@ -9,21 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {
-      "supportsTablet": true,
-      "config": {
-        "GOOGLE_API_KEY": ""
-      }
+      "supportsTablet": true
     },
     "android": {
       "package": "com.yourcompany.firstapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "config": {
-        "googleMaps": {
-          "GOOGLE_API_KEY": ""
-        }
       }
     },
     "web": {
@@ -45,9 +37,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "googleApiKey": ""
     }
   }
 }
