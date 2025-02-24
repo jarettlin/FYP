@@ -7,14 +7,23 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "GOOGLE_API_KEY": ""
+      }
     },
     "android": {
+      "package": "com.yourcompany.firstapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "GOOGLE_API_KEY": ""
+        }
       }
     },
     "web": {
@@ -36,6 +45,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "googleApiKey": ""
     }
   }
 }

@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Alert, StyleSheet, View, Dimensions, Text, Button } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { GOOGLE_API_KEY } from "@env"; // Correct import
+import Constants from "expo-constants";
 
+const GOOGLE_API_KEY = Constants?.expoConfig?.extra?.googleApiKey || "API_KEY_NOT_FOUND";
 
-console.log("Google API Key:", GOOGLE_API_KEY); // Debugging log
+console.log("API Key:", GOOGLE_API_KEY);
 
 const Home = () => {
   const [location, setLocation] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 
-  // 📌 Fetch user location on mount
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -22,13 +22,11 @@ const Home = () => {
 
       let userLocation = await Location.getCurrentPositionAsync({});
       setLocation(userLocation.coords);
-
-      // Fetch restaurants after setting location
+      
       fetchRestaurants(userLocation.coords.latitude, userLocation.coords.longitude);
     })();
   }, []);
 
-  // 📌 Fetch nearby restaurants using Google Places API
   const fetchRestaurants = async (latitude, longitude) => {
     if (!latitude || !longitude) {
       console.error("Invalid location");
@@ -62,15 +60,16 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    fetchRestaurants(3.1390, 101.6869); // Fetch KL restaurants on mount
+  }, []);
+
   return (
     <View style={styles.container}>
       {location ? (
         <>
           <MapView
             style={styles.map}
-            provider="google"
-            showsUserLocation={true}
-            showsMyLocationButton={true}
             initialRegion={{
               latitude: location.latitude,
               longitude: location.longitude,
@@ -79,11 +78,7 @@ const Home = () => {
             }}
           >
             {/* User Location */}
-            <Marker
-              coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-              title="Your Location"
-              pinColor="blue"
-            />
+            <Marker coordinate={{ latitude: location.latitude, longitude: location.longitude }} title="Your Location" />
 
             {/* Restaurants */}
             {restaurants.map((restaurant, index) => (
@@ -95,14 +90,12 @@ const Home = () => {
                 }}
                 title={restaurant.name}
                 description={restaurant.vicinity}
-                onPress={() =>
-                  Alert.alert(restaurant.name, `Rating: ${restaurant.rating || "N/A"}\nAddress: ${restaurant.vicinity}`)
-                }
+                onPress={() => Alert.alert(restaurant.name, `Rating: ${restaurant.rating}\nAddress: ${restaurant.vicinity}`)}
               />
-              ))}
+            ))}
           </MapView>
 
-          {/* Button to manually refresh restaurant list */}
+          {/* Button to manually fetch restaurants */}
           <Button title="Find Restaurants" onPress={() => fetchRestaurants(location?.latitude, location?.longitude)} />
         </>
       ) : (
